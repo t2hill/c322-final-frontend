@@ -1,0 +1,156 @@
+/* NAVBAR AND BASIC FORMATTING */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-right: 100px;
+    overflow: hidden;
+}
+.navbar li{
+    float: right;
+}
+.navbar li a {
+    display: block;
+    color: black;
+    font-size: 32px;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-weight: bolder;
+}    
+.navbar .home {
+    font-size: 24px;
+    color: #BF6900;
+    padding-left: 50px;
+}  
+body {
+    background-color: rgb(255, 245, 212);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* INDEX.HTML */
+.container {
+    height: 200px;
+    position: relative;
+}
+.center {
+    margin: 0;
+    margin-top: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.center button {
+    display: inline-block;
+    width: 400px;
+    height: 175px;
+    font-size: 32px;
+    font-weight: 600;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+/* SELECTBEVERAGE.HTML */
+#beverageMenu {
+    width: 1200px;
+    height: 500px;
+    display: flex;
+    flex-wrap: wrap;
+}
+#beverageMenu button {
+    display: inline-block;
+    width: 400px;
+    margin: 20px 100px;
+}
+
+/* ADDCONDIMENT.HTML */
+#condimentMenu {
+    width: 550px;
+    height: 500px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+#condimentMenu button {
+    display: inline-block;
+    width: 200px;
+    margin: 20px;
+}
+
+.fLeft {
+    float: left;
+    width: 70%;
+}
+.fRight {
+    float: left;
+    width: 30%
+}
+.right {
+    margin: 0;
+    margin-top: 400px;
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    border: 5px solid black;
+    border-radius: 15px;
+    height: 650px;
+    width: 300px;
+}
+.right button {
+    background-color: rgb(181, 156, 81);
+    font-size: 28px;
+}
+#statusTitle {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: #BF6900;
+}
+#orderMenu button {
+    width: 90%;
+    padding: 5px;
+    margin: 10px;
+    margin-left: 15px;
+}
+#confirm {
+    width: 100%;
+    margin: 10px;
+    position: absolute;
+    bottom: 0%;
+}
+#confirm button {
+    width: 90%;
+    padding: 10px 5px;
+    margin-left: 5px;
+}
+#getReceipt {
+    margin-top: 200px;
+    font-size: 26px;
+}
+
+/* SHARED CSS */
+#orderTitle {
+    text-align: center;
+    font-size: 34px;
+}
+button {
+    background-color: rgb(205, 192, 154);
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    font-size: 32px;
+    font-weight: 600;
+    border-radius: 10px;
+}
+button:hover {
+    background-color: rgb(160, 151, 122);
+}
+
+
