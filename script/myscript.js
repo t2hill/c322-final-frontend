@@ -71,7 +71,7 @@ function getReceipt() {
     let condiments = JSON.parse(localStorage.getItem("condiments"));
     let condStr = localStorage.getItem("beverage") + " with ";
     for (let c of condiments) {
-        condStr += c + " and"
+        condStr += c + " and ";
     } 
     let condVal = document.createTextNode(condStr.slice(0, -4) + "!")
     cond.appendChild(condVal);
