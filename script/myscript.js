@@ -73,7 +73,7 @@ function getReceipt() {
     for (let c of condiments) {
         condStr += c + " and ";
     } 
-    let condVal = document.createTextNode(condStr.slice(0, -4) + "!")
+    let condVal = document.createTextNode(condStr.slice(0, -5) + "!")
     cond.appendChild(condVal);
     receipt.appendChild(cond);
 
