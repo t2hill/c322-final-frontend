@@ -120,15 +120,10 @@ body {
     margin-left: 15px;
 }
 #confirm {
-    width: 100%;
+    width: 93%;
     margin: 10px;
     position: absolute;
     bottom: 0%;
-}
-#confirm button {
-    width: 90%;
-    padding: 10px 5px;
-    margin-left: 5px;
 }
 #getReceipt {
     margin-top: 200px;

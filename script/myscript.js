@@ -37,6 +37,7 @@ function setElements() {
     bevLink.appendChild(bevButton);
     order.appendChild(bevLink);
     console.log(localStorage.getItem("beverage"));
+    console.log(localStorage.getItem("condiments"));
 
     // Condiments
     for (let cond of JSON.parse(localStorage.getItem("condiments"))) {
@@ -50,12 +51,11 @@ function setElements() {
         conLink.appendChild(conButton);
         order.appendChild(conLink);
     }
-    console.log(localStorage.getItem("condiments"));
 }
 
 async function addReceipt() {
-    // let host = "http://localhost:8080";
-    let host = "https://coffee-order-kgpi.onrender.com";
+    let host = "http://localhost:8080";
+    // let host = "https://coffee-order-kgpi.onrender.com";
     let message = "";
     let orderData = {beverage: localStorage.getItem("beverage"), 
                     condiments: JSON.parse(localStorage.getItem("condiments"))};
@@ -79,14 +79,21 @@ async function addReceipt() {
     } catch (error) {
         message = "The following error occurred:\n" + error + "\n\nPlease try again or contact the customer support team";
     }
-    console.log(message);   
+    alert(message);   
+    console.log(message)
+    // Change the page
+    const currentPath = window.location.pathname;
+    const newPath = currentPath.replace("addCondiment.html", "orderStatus.html");
+    setTimeout(() => {
+        window.location.href = newPath;
+        }, 1500);
     
 }
 
 // ORDER STATUS
 async function getReceipt() {
-    // let host = "http://localhost:8080";
-    let host = "https://coffee-order-kgpi.onrender.com";
+    let host = "http://localhost:8080";
+    // let host = "https://coffee-order-kgpi.onrender.com";
     let request = {
         method: "GET",
         headers: {
@@ -136,6 +143,7 @@ if (document.getElementById('orderMenu')) {
 if (document.getElementById('getReceipt')) {
     window.onload = getReceipt;
 }
-if (window.location.href === 'file:///C:/Users/toohi/Documents/C322/coffee-order-ui/index.html') {
-    localStorage.setItem("condiments", []);
+// || 'https://t2hill.github.io/coffee-order-ui/index.html'
+if (window.location.href === 'file:///C:/Users/toohi/Documents/C322/coffee-order-ui/index.html' || window.location.href == 'https://t2hill.github.io/coffee-order-ui/index.html') {
+    localStorage.setItem("condiments", "");
 }
