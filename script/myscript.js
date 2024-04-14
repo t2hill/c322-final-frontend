@@ -92,8 +92,7 @@ async function addReceipt() {
 
 // ORDER STATUS
 async function getReceipt() {
-    // let host = "http://localhost:8080";
-    let host = "https://coffee-order-kgpi.onrender.com";
+    let host = getHost();
     let request = {
         method: "GET",
         headers: {
