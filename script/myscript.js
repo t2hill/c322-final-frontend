@@ -54,8 +54,7 @@ function setElements() {
 }
 
 async function addReceipt() {
-    // let host = "http://localhost:8080";
-    let host = "https://coffee-order-kgpi.onrender.com";
+    let host = getHost();
     let message = "";
     let orderData = {beverage: localStorage.getItem("beverage"), 
                     condiments: JSON.parse(localStorage.getItem("condiments"))};
