@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/addToBasket.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header>
+        <nav>
+            <div class="logo" id="homePageButton">
+                <img src="/images/logo.png" alt="Final Project">
+            </div>
+            <div class="nav-links">
+                <a href="trackOrder.html">Track Order</a>
+                <a href="#">Help</a>
+                <a href="login.html">Account</a>
+                <i id="cart" class="fa badge fa-lg cart" value=0>&#xf07a;</i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN PAGE -->
+    <div class="flex-container" id="container">
+        <div class="image-container" id="image"></div>
+        <div class="details-container">
+            <h1 id="flowerName"></h1>
+            <br>
+            <h3>DELIVERY DATE</h3>
+            <label>
+                <input type="date" id="dateInput" name="dateInput">
+            </label>
+            <div class="purchase-options">
+                <h3>PURCHASING OPTIONS</h3>
+                <label>
+                    <input type="radio" name="purchase-option" value="subscription" checked> Start a Subscription: $32 + free shipping
+                </label>
+                <p><b>Best Value:</b> Up to 30% off + free shipping on subscription deliveries.</p>
+                <p><b>Flexible:</b> Pick your flowers, date & recipient every month, or set & forget it.</p>
+                <p><b>No Commitment:</b> Skip an order in your Client Account.</p>
+                <br>
+                <hr>
+                <label id="flowerCost">
+                    <input type="radio" name="purchase-option" value="one-time">
+                </label>
+            </div>
+            <div id="addToBasket">
+
+            </div>
+        </div>
+        
+    </div>
+    
+
+    <!-- JAVASCRIPT -->
+    <!-- <script src="configuration.js"></script> -->
+    <script>
+        let host = "http://localhost:8080";
+        let flower = {};
+
+        executeFunctions();
+
+        async function getFlowerId() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var flowerId = urlParams.get('id');
+            let response = await fetch(host + "/flowers/" + flowerId);
+            flower = await response.json();
+        }
+
+        async function displayFlower() {
+            console.log(flower.id);
+            let img = document.getElementById("image");
+            let innerHtml = `<img src="http://localhost:8080/flowers/${flower.id}/image" alt="${flower.name}">`
+            img.innerHTML = innerHtml;
+
+            let title = document.getElementById("flowerName");
+            title.textContent = flower.name;
+
+            let cost = document.getElementById("flowerCost");
+            cost.innerHTML = `<input type="radio" name="purchase-option" value="one-time">One time purchase: <b>$${flower.cost}</b>`
+        
+            let btn = document.getElementById("addToBasket");
+            btn.innerHTML = `<button class="add-to-basket" onclick="redirectToProductPage(${flower.id})">ADD TO BASKET</button>`
+
+        }
+        async function executeFunctions() {
+            await getFlowerId();
+            displayFlower();
+        }
+
+        function getSelectedDate() {
+            var dateInput = document.getElementById('dateInput');
+            return dateInput.value;
+        }
+
+        function getPurchaseOption() {
+            var radioButtons = document.querySelectorAll('input[type="radio"]');
+            for (var i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].checked) {
+                    return radioButtons[i].value;
+                }
+            }
+        }
+
+        function redirectToProductPage(productId) {
+            var url = 'addDelivery.html?id=' + productId;
+            var date = getSelectedDate();
+            if (date == "") {
+                alert("Must select a delivery date!");
+                return null;
+            }
+            var option = getPurchaseOption();
+            url += '&deliveryDate=' + encodeURIComponent(date);
+            url += '&purchaseOption=' + encodeURIComponent(option);
+
+            window.location.href = url;
+        }
+
+        document.getElementById("homePageButton").addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

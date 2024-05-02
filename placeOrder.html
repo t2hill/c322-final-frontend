@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Delivery Checkout</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/placeOrder.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header>
+        <nav>
+            <div class="logo" id="homePageButton">
+                <img src="/images/logo.png" alt="Final Project">
+            </div>
+            <div class="nav-links">
+                <a href="trackOrder.html">Track Order</a>
+                <a href="#">Help</a>
+                <a href="login.html">Account</a>
+                <i id="cart" class="fa badge fa-lg cart" value=0>&#xf07a;</i>
+            </div>
+        </nav>
+    </header>
+
+
+    <div class="container">
+        <div class="progress-bar">
+            <div class="step">REVIEW</div>
+            <div class="step">DELIVERY</div>
+            <div class="step active">DONE</div>
+        </div>
+        <div class="product-info" id="productInfo"></div>
+        <div class="order-summary" id="orderSum"></div>
+    </div>
+
+    <!-- <script src="configuration.js"></script> -->
+    <script>
+        let host = "http://localhost:8080";
+        let params = [];
+        let flower = {};
+        let orderTotal = 0;
+
+        executeFunctions();
+
+        async function parseQueryParameters() {
+            var queryString = window.location.search.substring(1); // Get query string without the '?'
+            var parameters = {};
+            var pairs = queryString.split('&'); // Split query string into key-value pairs
+            // Loop through key-value pairs and parse them
+            pairs.forEach(function(pair) {
+                var keyValue = pair.split('=');
+                var key = decodeURIComponent(keyValue[0]);
+                var value = decodeURIComponent(keyValue[1]);
+                parameters[key] = value;
+            });
+            params = parameters;
+        }
+
+        async function getFlowerId() {
+            var params = new URLSearchParams(window.location.search);
+            var flowerId = params.get('id');
+            let response = await fetch(host + "/flowers/" + flowerId);
+            flower = await response.json();
+        }
+
+        async function displayOrder() {
+            let list = document.getElementById("productInfo");
+            list.innerHTML = "";
+            let innerHtml = `
+
+            <img src="http://localhost:8080/flowers/${flower.id}/image" alt="The Angels">
+            <h2>${flower.name}</h2>
+            <br>
+            <hr>
+            <br>
+            <p><b>Delivery Date:</b></p>
+            <p>${params.deliveryDate}</p>
+            <br>
+            <hr>
+            <br>
+            <p><b>Item Pricing:</b></p>
+            <p>$${flower.cost}</p>
+            <br>
+            <hr>
+            <br>
+            <div class="delivery-address">
+                <p><b>Delivery Address:</b></p>
+                <p>${params.firstName} ${params.lastName}</p>
+                <p>${params.address}</p>
+                <p>${params.city} ${params.state} ${params.zip}</p>
+            </div>
+
+            `
+            list.innerHTML = innerHtml;
+
+            var orderSum = document.getElementById("orderSum");
+            innerHtml = `
+
+            <div class="savings">You are saving $10.00 on this order!</div>
+            <div class="subtotal">
+                <span>SUBTOTAL</span>
+                <span>$${flower.cost}.00</span>
+            </div>
+            <div class="delivery-fee">
+                <span>Delivery</span>
+                <span>$20.00</span>
+            </div>
+            <div class="discount-amount">
+                <span>Discount/Payment</span>
+                <span>-$10.00</span>
+            </div>
+            <div class="tax">
+                <span>Tax</span>
+                <span>$0.00</span>
+            </div>
+            <div class="order-total">
+                <span>ORDER TOTAL</span>
+                <span>$${orderTotal}.00</span>
+            </div>
+            <p class="terms">By Clicking "Place Order" you agree to the Terms of Use and Privacy Policy</p>
+            <button class="place-order" onclick="saveData()">PLACE ORDER</button>
+
+            `
+            orderSum.innerHTML = innerHtml;
+        }
+
+        async function executeFunctions() {
+            await parseQueryParameters();
+            console.log(params);
+            await getFlowerId();
+            displayOrder();
+            orderTotal = flower.cost + 20 - 10;
+        }
+
+        async function saveData() {
+            let receipt = {"id": params.id, "cost": orderTotal, "firstName": params.firstName, "lastName": params.lastName, "status": "Order Placed"}
+            let request = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(receipt)
+            };
+            let response = await fetch(host + "/orders", request);
+            if(response.status == 200) {
+                let id = await response.json();
+                message = "The order was added successfully!";
+                alert(message);
+                window.location.href = 'index.html';
+            } else {
+                console.log(response);
+                message = "Something went wrong! Order could not be saved.";
+                alert(message);
+            }
+        }
+
+        document.getElementById("homePageButton").addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

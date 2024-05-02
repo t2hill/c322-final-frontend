@@ -1,0 +1,91 @@
+.container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sign-up-btn,
+.log-in-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.sign-up-btn {
+  background-color: #1D4C3E;
+  color: #fff;
+}
+.sign-up-btn:hover {
+  background-color: #112e25;
+}
+
+.log-in-btn {
+  background-color: #ccc;
+  color: #333;
+}
+.log-in-btn:hover {
+  background-color: #959393;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.show-password {
+  display: block;
+  margin-top: 5px;
+  text-decoration: none;
+  color: #1D4C3E;
+}
+
+.create-account-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1D4C3E;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+.create-account-btn:hover {
+  background-color: #112e25;
+}
+
+.terms {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+  font-size: 14px;
+}

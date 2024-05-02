@@ -3,60 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" rel="stylesheet">
     <title>Login/Registeration</title>
 </head>
 <body>
-  <ul class="navbar">
-    <li><a href="orderStatus.html">Order Status</a></li>
-    <li><a href="login.html">Login</a></li>
-    <li style="float:left"><a class="home" href="index.html">Coffee Order System</a></li>
-  </ul>
-
-      <div class="container">
-        <form>
-          <div class="row">
-            <h2 style="text-align:center">Login with Social Media or Manually</h2>
-            <div class="vl">
-              <span class="vl-innertext">or</span>
-            </div>
-      
-            <div class="col">
-              <a href="#" class="fb btn">
-                <i class="fa fa-facebook fa-fw"></i> Login with Github
-              </a>           
-              <a href="#" class="google btn">
-                <i class="fa fa-google fa-fw"></i> Login with Google
-              </a>
-            </div>
-      
-            <div class="col">
-              <div class="hide-md-lg">
-                <p>Or sign in manually:</p>
-              </div>
-      
-              <input type="text" id="username" placeholder="Username" required>
-              <input type="password" id="password" placeholder="Password" required>
-              <input type="button" onclick="login()" value="Login">
-            </div>
-      
-          </div>
-        </form>
-      </div>
-      
-      <div class="bottom-container">
-        <div class="row">
-          <div class="col">
-            <a href="register.html" style="color:white" class="btn">Sign up</a>
-          </div>
-          <div class="col">
-            <a href="#" style="color:white" class="btn">Forgot password?</a>
-          </div>
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+        <div class="logo" id="homePageButton">
+            <img src="/images/logo.png" alt="Final Project">
         </div>
-      </div>
+        <div class="nav-links">
+            <a href="trackOrder.html">Track Order</a>
+            <a href="#">Help</a>
+            <a href="login.html">Account</a>
+            <i id="cart" class="fa badge fa-lg cart" value=0>&#xf07a;</i>
+        </div>
+    </nav>
+  </header>
 
-      <script src="configuration.js"></script>
-    
+  <div class="container" id="mainContainer"></div>
+
+  <!-- <script src="configuration.js"></script> -->
+  <script>
+    let host = "http://localhost:8080";
+    let params = [];
+
+    parseQueryParameters();
+    loadPage(params.login);
+
+    async function parseQueryParameters() {
+      var queryString = window.location.search.substring(1); // Get query string without the '?'
+      var parameters = {};
+      var pairs = queryString.split('&'); // Split query string into key-value pairs
+      // Loop through key-value pairs and parse them
+      pairs.forEach(function(pair) {
+          var keyValue = pair.split('=');
+          var key = decodeURIComponent(keyValue[0]);
+          var value = decodeURIComponent(keyValue[1]);
+          parameters[key] = value;
+      });
+      params = parameters;
+    }
+
+    async function loadPage(loginPage) {
+      var div = document.getElementById('mainContainer');
+      console.log(loginPage);
+      if (!loginPage) {
+        let innerHtml = `
+
+        <h1>SIGN UP TO SAVE</h1>
+        <div class="buttons">
+            <button class="sign-up-btn" onclick='loadPage(false)'>SIGN UP</button>
+            <button class="log-in-btn" onclick='loadPage(true)'>LOG IN</button>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password">
+            <a href="#" class="show-password">Show Password</a>
+        </div>
+        <button class="create-account-btn">CREATE AN ACCOUNT</button>
+        <p class="terms">By Clicking "Create an Account" you agree to the Terms of Use and Privacy Policy</p>
+
+        `
+        div.innerHTML = innerHtml;
+      }
+      else {
+        let innerHtml = `
+
+        <div class="buttons">
+            <button class="log-in-btn" onclick='loadPage(false)'>SIGN UP</button>
+            <button class="sign-up-btn" onclick='loadPage(true)'>LOG IN</button>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password">
+            <a href="#" class="show-password">Show Password</a>
+        </div>
+        <button class="create-account-btn">LOG IN</button>
+
+        `
+        div.innerHTML = innerHtml;
+      }
+    }
+
+    function keepUrlData() {
+      var currentUrl = window.location.href;
+      var index = currentUrl.indexOf("?");
+      currentUrl = currentUrl.substring(index, currentUrl.length);
+    }
+
+    document.getElementById("homePageButton").addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+  </script>
 </body>
 </html>

@@ -35,23 +35,10 @@ let configuration = {
     token: () => getTheToken()
 };
 
-updateTheNavigationBar();
-
-async function updateTheNavigationBar() {
-    const navigation = document.getElementsByClassName("navbar")[0];
-    let loginTag = navigation.children[navigation.children.length - 2];
-    if(configuration.isLoggedIn()) {
-        loginTag.innerHTML = 
-        `<li><a href="login.html" onclick="logout()">Logout</a></li>`;
-    } else {
-        loginTag.innerHTML = `<li><a href="login.html">Login</a></li>`;
-    }
-}
-
 async function login() {
-    let username = document.getElementById("username").value;
+    let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
-    let customer = {username: username, password: password}
+    let customer = {email: email, password: password}
     let request = {
         method: "POST",
         headers: {
@@ -79,6 +66,30 @@ async function login() {
     }
 }
 
-async function logout() {
-    removeTheToken();
+async function signup() {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let customer = {email:email, password: password}
+    let request = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(customer)
+      };
+      try {
+        let response = await fetch(getHost() + "/signup", request);
+        if(response.status == 200) {  
+            alert("The registration was successful!")
+            location.href = "index.html";
+
+        } else {
+            console.log(`response status:${response.status}`);            
+            alert("Something went wrong!");
+        }
+      }
+      catch(error) {
+        console.log(error);        
+        alert("Something went wrong!");
+      }    
 }

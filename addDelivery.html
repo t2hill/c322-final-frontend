@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Info</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/addDelivery.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header>
+        <nav>
+            <div class="logo" id="homePageButton">
+                <img src="/images/logo.png" alt="Final Project">
+            </div>
+            <div class="nav-links">
+                <a href="trackOrder.html">Track Order</a>
+                <a href="#">Help</a>
+                <a href="login.html">Account</a>
+                <i id="cart" class="fa badge fa-lg cart" value=0>&#xf07a;</i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="container">
+        <div class="progress-bar">
+            <div class="step">REVIEW</div>
+            <div class="step active">DELIVERY</div>
+            <div class="step">DONE</div>
+        </div>
+        <div class="offer">Save $10 on every delivery with an account</div>
+        <div class="auth-buttons">
+            <button class="login-btn" onclick='redirect(true, "")'>LOG IN</button>
+            <button class="signup-btn" onclick='redirect(false, "")'>SIGN UP</button>
+        </div>
+        <hr>
+        <div class="product-info">
+            <h2 id="flowerName">THE ANGELS</h2>
+            <div id="flowerCost" class="price"></div>
+        </div>
+        <hr>
+        <form id="deliveryForm" class="recipient-info">
+            <label for="firstName">First Name*</label>
+            <input type="text" id="firstName" placeholder="First Name">
+            <label for="lastName">Last Name*</label>
+            <input type="text" id="lastName" placeholder="Last Name">
+            <label for="relationship">Relationship*</label>
+            <select id="relationship">
+                <option value="">Select</option>
+                <option value="grandmother">Grandmother</option>
+                <option value="mother">Mother</option>
+                <option value="daughter">Daughter</option>
+                <option value="other">Other</option>
+            </select>
+            <h3>DELIVER TO</h3>
+            <label for="address">Address*</label>
+            <input type="text" id="address" placeholder="Address">
+            <label for="aptSuite">Apt/Suite</label>
+            <input type="text" id="aptSuite" placeholder="Address">
+            <label for="city">City*</label>
+            <input type="text" id="city" placeholder="City">
+            <label for="state">State*</label>
+            <select id="state">
+                <option value="">Select</option>
+                <option value="IN">Indiana</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="zip">Zip Code*</label>
+            <input type="text" id="zip" placeholder="Zip Code">
+        </form>
+        <button class="continue-btn" onclick='redirect(true, "placeOrder.html")'>CONTINUE</button>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <!-- <script src="configuration.js"></script> -->
+    <script>
+        var params = {};
+        var values = [];
+        let host = "http://localhost:8080";
+        let flower = {};
+
+        executeFunctions();
+
+        async function executeFunctions() {
+            await parseQueryParameters();
+            await getFlowerId();
+            addValues();
+        }
+
+        async function getFlowerId() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var flowerId = urlParams.get('id');
+            let response = await fetch(host + "/flowers/" + flowerId);
+            flower = await response.json();
+        }
+
+        async function parseQueryParameters() {
+            var queryString = window.location.search.substring(1); // Get query string without the '?'
+            var parameters = {};
+            var pairs = queryString.split('&'); // Split query string into key-value pairs
+
+            // Loop through key-value pairs and parse them
+            pairs.forEach(function(pair) {
+                var keyValue = pair.split('=');
+                var key = decodeURIComponent(keyValue[0]);
+                var value = decodeURIComponent(keyValue[1]);
+                parameters[key] = value;
+            });
+            params = parameters;
+        }
+
+        async function addValues() {
+            var selected = document.getElementById("flowerName");
+            selected.textContent = flower.name;
+            var selected = document.getElementById("flowerCost");
+            selected.textContent = "$" + flower.cost;
+        }
+
+        async function redirect(loginPage, cont) {
+            await getValues();
+            let bool = false;
+            let url = "login.html";
+            var queryParams = [];
+
+            for (var pair of values) {
+                console.log(pair);
+                if (pair[1] == "undefined" || pair[1] == null) {
+                    pair[1] = "";
+                }
+                queryParams.push(pair[0] + '=' + encodeURIComponent(pair[1]));
+                params[pair[0]] = pair[1];
+            }
+            
+            var queryString = queryParams.join('&');
+            
+            var currentUrl = window.location.href;
+            var index = currentUrl.indexOf("?");
+            currentUrl = currentUrl.substring(index, currentUrl.length);
+            if (cont == "placeOrder.html") {
+                if (await allFilledOut()) {
+                    url = "placeOrder.html";
+                    url += currentUrl + "&" + queryString;
+                    window.location.href = url;
+                }
+                else {
+                    return null;
+                }
+            }
+            url += currentUrl + "&" + queryString;
+            url += "&login=" + loginPage;
+            window.location.href = url;
+        }
+
+        async function allFilledOut() {
+            await getValues();
+            console.log(params);
+            if (params.firstName != null && params.lastName != null
+            && params.relationship != null && params.address != null && params.city != null
+            && params.state != null && params.zip != null) {
+                return true;
+            } 
+            else {
+                alert("You're missing some Information!")
+                return false;
+            }
+        }
+
+        async function getValues() {
+            var selected = document.getElementById('firstName').value;
+            values.push(['firstName', selected]);
+            selected = document.getElementById('lastName').value;
+            values.push(['lastName', selected]);
+            selected = document.getElementById('relationship').value;
+            values.push(['relationship', selected]);
+
+            selected = document.getElementById('address').value;
+            values.push(['address', selected]);
+            selected = document.getElementById('aptSuite').value;
+            values.push(['aptSuite', selected]);
+            selected = document.getElementById('city').value;
+            values.push(['city', selected]);
+            selected = document.getElementById('state').value;
+            values.push(['state', selected]);
+            selected = document.getElementById('zip').value;
+            values.push(['zip', selected]);
+        }
+
+        document.getElementById("homePageButton").addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

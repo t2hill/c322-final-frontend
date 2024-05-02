@@ -4,27 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" rel="stylesheet">
 </head>
 <body>
     <!-- NAVBAR -->
-    <ul class="navbar">
-        <li><a href="orderStatus.html">Order Status</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li style="float:left"><a class="home" href="index.html">Coffee Order System</a></li>
-    </ul>
+    <header>
+        <nav>
+            <div class="logo" id="homePageButton">
+                <img src="/images/logo.png" alt="Final Project">
+            </div>
+            <div class="nav-links">
+                <a href="trackOrder.html">Track Order</a>
+                <a href="#">Help</a>
+                <a href="login.html">Account</a>
+                <i id="cart" class="fa badge fa-lg cart" value=0>&#xf07a;</i>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="flex-container hero">
+            <div class="flex-child left">
+                <h1>Send Her Blooms</h1>
+                <p>___</p>
+                <p>She will love! Shop All Mother's Day Flowers and Gifts!</p>
+            </div>
+            <img class="flex-child right" src="/images/hero-image.jpg" alt="Mother's Day Flowers">
+        </section>
+    </main>
 
-    <!-- CONTENT -->
-    <div class="container">
-        <div class="center">
-            <a href="selectBeverage.html">
-                <button onclick="clearCondiments()">Start your order here</button>
-            </a>
+    <!-- FILTERS -->
+    <form>
+        <div class="form-group">
+            <label for="flowerType">FILTER BY</label>
+            <select name="flowerType" id="flowerType">
+                <option value="">Flower Type</option>
+                <option value="mixed">Mixed</option>
+                <option value="roses">Roses</option>
+                <option value="lilies">Lilies</option>
+                <option value="tulips">Tulips</option>
+                <option value="dasias">Dasies</option>
+            </select>
         </div>
-    </div>
+        <div class="form-group">
+            <select name="flowerOccasion" id="flowerOccasion">
+                <option value="">Occasion</option>
+                <option value="mothers day">Mother's Day</option>
+                <option value="birthday">Birthday</option>
+                <option value="thank you">Thank you</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select name="flowerColor" id="flowerColor">
+                <option value="">Color</option>
+                <option value="red">Red</option>
+                <option value="yellow">Yellow</option>
+                <option value="green">Green</option>
+                <option value="orange">Orange</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sort">SORT</label>
+            <select name="sort" id="sort">
+                <option value="lowToHigh">Price: Low to High</option>
+                <option value="highToLow">Price: High to Low</option>
+            </select>
+        </div>
+    </form>
+    <!-- PRODUCTS -->
+    <div id="products" class="cards"></div>
 
     <!-- JAVASCRIPT -->
-    <script src="script/myscript.js"></script>
-    <script src="configuration.js"></script>
+    <!-- <script src="configuration.js"></script> -->
+    <script>
+        let host = "http://localhost:8080";
+        let flowers = [];
+        let filterFlowers = [];
+        let filters = {"type": "", "occasion": "", "color": "", "sort": "lowToHigh"};
+        displayTheFlowers()
+
+        async function getAll() {
+            let response = await fetch(host + "/flowers");
+            let result = await response.json();
+            return result;
+        }
+
+        async function displayTheFlowers() {
+            if (flowers.length == 0) {
+                flowers = await getAll();
+            }
+
+            let list = document.getElementById("products");
+            list.innerHTML = "";
+
+            sortFlowers();
+
+            // Need to check which questions have already been added
+            for (let flower of filterFlowers) {
+
+                let div = document.createElement("div");
+                div.className = "card";
+                let innerHtml = `
+                
+                <button onclick=redirectToProductPage(${flower.id})>
+                    <img src="http://localhost:8080/flowers/${flower.id}/image" alt="question" style="width:100%">
+                    <div class="container">
+                        <p><b>${flower.name}</b></p>
+                        <p>from <b>$${flower.cost}</b></p>
+                    </div>
+                </button>
+            
+                    `;
+                div.innerHTML = innerHtml;
+                list.appendChild(div);
+            }
+        }
+        
+        async function sortFlowers() {
+            getValue();
+            filterFlowers = [];
+            let satifiesFilter = 0;
+            let filtersToSatisfy = 0;
+
+            for (let flower of flowers) {
+                if (filters.type != "") {
+                    if (filters.type != flower.type) {
+                        continue;
+                    }
+                }
+                if (filters.occasion != "") {
+                    if (filters.occasion != flower.occasion) {
+                        continue;
+                    }
+                }
+                if (filters.color != "") {
+                    if (filters.color != flower.color) {
+                        continue;
+                    }
+                }
+                filterFlowers.push(flower);
+            }
+            if (filters.sort == "highToLow") {
+                filterFlowers.reverse();
+            }
+        }
+        async function getValue() {
+            var selectedElement = document.getElementById("flowerType");
+            var selectedValue = selectedElement.value;
+            filters.type = selectedValue;
+
+            selectedElement = document.getElementById("flowerOccasion");
+            selectedValue = selectedElement.value;
+            filters.occasion = selectedValue;
+
+            selectedElement = document.getElementById("flowerColor");
+            selectedValue = selectedElement.value;
+            filters.color = selectedValue;
+
+            selectedElement = document.getElementById("sort");
+            selectedValue = selectedElement.value;
+            filters.sort = selectedValue;
+        }
+
+        function redirectToProductPage(productId) {
+            window.location.href = 'addToBasket.html?id=' + productId;
+        }
+        
+        document.getElementById("flowerType").addEventListener("change", function() {
+            displayTheFlowers();
+        });
+        document.getElementById("flowerOccasion").addEventListener("change", function() {
+            displayTheFlowers();
+        });
+        document.getElementById("flowerColor").addEventListener("change", function() {
+            displayTheFlowers();
+        });
+        document.getElementById("sort").addEventListener("change", function() {
+            displayTheFlowers();
+        });
+        document.getElementById("homePageButton").addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>
