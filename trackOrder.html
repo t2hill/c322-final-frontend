@@ -13,7 +13,7 @@
     <header>
         <nav>
             <div class="logo" id="homePageButton">
-                <img src="/images/logo.png" alt="Final Project">
+                <img src="images/logo.png" alt="Final Project">
             </div>
             <div class="navbar">
                 <a href="trackOrder.html">Track Order</a>
@@ -31,9 +31,22 @@
         </div>
     </main>
 
-    <!-- <script src="configuration.js"></script> -->
+    <script src="script/configuration.js"></script>
+    <script src="script/myscript.js"></script>
+
     <script>
-        let host = "http://localhost:8080";
+        let host = getHost();
+
+        async function showOrders() {
+            if (configuration.isLoggedIn) {
+                const headers = {"Authorization": `Bearer ${configuration.token()}`};
+                let response = await fetch(host + "/orders", { headers });
+            }
+        }
+
+        document.getElementById("homePageButton").addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
     </script>
 </body>
 </html>

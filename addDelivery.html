@@ -13,7 +13,7 @@
     <header>
         <nav>
             <div class="logo" id="homePageButton">
-                <img src="/images/logo.png" alt="Final Project">
+                <img src="images/logo.png" alt="Final Project">
             </div>
             <div class="nav-links">
                 <a href="trackOrder.html">Track Order</a>
@@ -75,11 +75,13 @@
     </div>
 
     <!-- JAVASCRIPT -->
-    <!-- <script src="configuration.js"></script> -->
+    <script src="script/configuration.js"></script>
+    <script src="script/myscript.js"></script>
+
     <script>
         var params = {};
         var values = [];
-        let host = "http://localhost:8080";
+        let host = getHost();
         let flower = {};
 
         executeFunctions();
@@ -93,7 +95,8 @@
         async function getFlowerId() {
             var urlParams = new URLSearchParams(window.location.search);
             var flowerId = urlParams.get('id');
-            let response = await fetch(host + "/flowers/" + flowerId);
+            const headers = {"Authorization": `Bearer ${configuration.token()}`};
+            let response = await fetch(host + "/flowers", { headers });
             flower = await response.json();
         }
 

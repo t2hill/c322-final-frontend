@@ -13,7 +13,7 @@
     <header>
         <nav>
             <div class="logo" id="homePageButton">
-                <img src="/images/logo.png" alt="Final Project">
+                <img src="images/logo.png" alt="Final Project">
             </div>
             <div class="nav-links">
                 <a href="trackOrder.html">Track Order</a>
@@ -30,7 +30,7 @@
                 <p>___</p>
                 <p>She will love! Shop All Mother's Day Flowers and Gifts!</p>
             </div>
-            <img class="flex-child right" src="/images/hero-image.jpg" alt="Mother's Day Flowers">
+            <img class="flex-child right" src="images/hero-image.jpg" alt="Mother's Day Flowers">
         </section>
     </main>
 
@@ -76,16 +76,19 @@
     <div id="products" class="cards"></div>
 
     <!-- JAVASCRIPT -->
-    <!-- <script src="configuration.js"></script> -->
+    <script src="script/configuration.js"></script>
+    <script src="script/myscript.js"></script>
+
     <script>
-        let host = "http://localhost:8080";
+        let host = getHost();
         let flowers = [];
         let filterFlowers = [];
         let filters = {"type": "", "occasion": "", "color": "", "sort": "lowToHigh"};
         displayTheFlowers()
 
         async function getAll() {
-            let response = await fetch(host + "/flowers");
+            const headers = {"Authorization": `Bearer ${configuration.token()}`};
+            let response = await fetch(host + "/flowers", { headers });
             let result = await response.json();
             return result;
         }

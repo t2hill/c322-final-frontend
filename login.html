@@ -13,7 +13,7 @@
   <header>
     <nav>
         <div class="logo" id="homePageButton">
-            <img src="/images/logo.png" alt="Final Project">
+            <img src="images/logo.png" alt="Final Project">
         </div>
         <div class="nav-links">
             <a href="trackOrder.html">Track Order</a>
@@ -26,9 +26,10 @@
 
   <div class="container" id="mainContainer"></div>
 
-  <!-- <script src="configuration.js"></script> -->
+  <script src="script/configuration.js"></script>
+  <script src="script/myscript.js"></script>
   <script>
-    let host = "http://localhost:8080";
+    let host = getHost();
     let params = [];
 
     parseQueryParameters();

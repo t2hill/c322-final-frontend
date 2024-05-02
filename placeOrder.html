@@ -13,7 +13,7 @@
     <header>
         <nav>
             <div class="logo" id="homePageButton">
-                <img src="/images/logo.png" alt="Final Project">
+                <img src="images/logo.png" alt="Final Project">
             </div>
             <div class="nav-links">
                 <a href="trackOrder.html">Track Order</a>
@@ -35,9 +35,11 @@
         <div class="order-summary" id="orderSum"></div>
     </div>
 
-    <!-- <script src="configuration.js"></script> -->
+    <script src="script/configuration.js"></script>
+    <script src="script/myscript.js"></script>
+
     <script>
-        let host = "http://localhost:8080";
+        let host = getHost();
         let params = [];
         let flower = {};
         let orderTotal = 0;
@@ -61,7 +63,8 @@
         async function getFlowerId() {
             var params = new URLSearchParams(window.location.search);
             var flowerId = params.get('id');
-            let response = await fetch(host + "/flowers/" + flowerId);
+            const headers = {"Authorization": `Bearer ${configuration.token()}`};
+            let response = await fetch(host + "/questions", { headers });
             flower = await response.json();
         }
 
@@ -139,7 +142,8 @@
             let request = {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${configuration.token()}`
                 },
                 body: JSON.stringify(receipt)
             };
